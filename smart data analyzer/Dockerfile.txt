@@ -1,0 +1,29 @@
+# Use a lightweight Python base image
+FROM python:3.9-slim-buster
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy requirements.txt and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create the .streamlit directory
+RUN mkdir -p .streamlit
+# Copy config.toml into the .streamlit directory
+# FIX: Corrected the source path to .streamlit/config.toml
+COPY .streamlit/config.toml .streamlit/config.toml
+
+# Copy the application code into the container
+COPY . .
+
+# Expose the port Streamlit runs on
+EXPOSE 8501
+
+# Command to run the Streamlit application
+# browser.gatherUsageStats is set as a command-line option.
+# Other global settings are now handled by config.toml.
+CMD ["streamlit", "run", "app.py", \
+     "--server.port=8501", \
+     "--server.address=0.0.0.0", \
+     "--browser.gatherUsageStats=false"]

@@ -1,0 +1,15 @@
+[global]
+dataFrameSerialization = "legacy"
+minCachedMessageSize = 50000000
+
+[runner]
+# Set the paths for Streamlit's internal cache and uploaded files to /tmp
+# /tmp is typically a writable directory in containerized environments like Hugging Face Spaces.
+cacheRoot = "/tmp/streamlit_cache"
+uploadedFileManager.path = "/tmp/streamlit_uploads"
+
+[server]
+# FIX: Explicitly disable CORS and XSRF protection to avoid 403 errors in some deployment environments.
+# This is often necessary when Streamlit is running behind a proxy or in a specific container setup.
+enableCORS = false
+enableXsrfProtection = false
